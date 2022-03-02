@@ -1,7 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
+
+/* Note: animations are called via the controller for both the character and capsule using animator null checks
+ */
 
 namespace StarterAssets
 {
@@ -64,14 +67,11 @@ namespace StarterAssets
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
-		private PlayerInput _playerInput;
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
 
 		private const float _threshold = 0.01f;
-		
-		private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
 		private void Awake()
 		{
@@ -86,7 +86,6 @@ namespace StarterAssets
 		{
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
-			_playerInput = GetComponent<PlayerInput>();
 
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
@@ -117,11 +116,8 @@ namespace StarterAssets
 			// if there is an input
 			if (_input.look.sqrMagnitude >= _threshold)
 			{
-				//Don't multiply mouse input by Time.deltaTime
-				float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-				
-				_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
-				_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
+				_cinemachineTargetPitch += _input.look.y * RotationSpeed * Time.deltaTime;
+				_rotationVelocity = _input.look.x * RotationSpeed * Time.deltaTime;
 
 				// clamp our pitch rotation
 				_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);

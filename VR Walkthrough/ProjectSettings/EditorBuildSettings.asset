@@ -8,4 +8,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Playground.unity
     guid: 707acc8dffb72b144bb1ffbe1c965f3d
-  m_configObjects: {}
+  m_configObjects:
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: b73c1f1dc9c9c894899b6b33fa5271ea, type: 2}
